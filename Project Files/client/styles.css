@@ -1,0 +1,115 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin-top: 70px;
+}
+
+.top-banner {
+    width: 100%;
+    background: linear-gradient(90deg, #7F00FF, #ff6a00);
+    /* purple gradient */
+    color: white;
+    padding: 15px 0;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.top-banner-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.screen {
+    display: none;
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.screen.visible {
+    display: block;
+}
+
+.hidden {
+    display: none !important;
+}
+
+input,
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #ff7f50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #ff6333;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+#toggle-text {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+#toggle-text span {
+    color: #ff7f50;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.option {
+    background-color: #eee;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.option.selected {
+    background-color: #d4edda;
+    font-weight: bold;
+}
+
+#leaderboard-list li {
+    list-style: none;
+    background: #f2f2f2;
+    margin: 6px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
