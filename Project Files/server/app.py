@@ -1,20 +1,22 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 import datetime
 
 app = Flask(__name__)
-CORS(app)  # Allows cross-origin JS requests
+CORS(app)  
 
 client = MongoClient("mongodb+srv://meghnamadhu2004:Meg2402@cluster0.kxegcng.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db = client["quizApp"]
 questions_col = db["questions"]
 leaderboard_col = db["leaderboard"]
 scores_col = db["leaderboard"]
-users_col = db["users"]  # Optional for user info
+users_col = db["users"]  
 
 ADMIN_EMAIL = "meghnamadhu24@gmail.com"
 
+#CREATE
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -24,7 +26,7 @@ def register():
 
     users_col.insert_one({
         "email": data["email"],
-        "password": data["password"]  # Consider hashing later!
+        "password": data["password"]  
     })
     return jsonify({"message": "Registered successfully"}), 201
 
@@ -46,35 +48,51 @@ def login():
 
 
 
+#READ
+
 @app.route("/questions", methods=["GET"])
 def get_questions():
-    questions = list(questions_col.find({}, {"_id": 0}))
+    questions = []
+    for q in questions_col.find():
+        q["_id"] = str(q["_id"])  # Convert ObjectId to string
+        questions.append(q)
     return jsonify(questions)
 
-@app.route("/question/update", methods=["POST"])
-def update_question():
-    data = request.json
-    if data["email"] != ADMIN_EMAIL:
-        return jsonify({"error": "Unauthorized"}), 403
 
+#UPDATE
+
+@app.route('/question/<id>', methods=['PUT'])
+def update_question(id):
+    data = request.get_json()
     result = questions_col.update_one(
-        {"question": data["original_question"]},
+        {"_id": ObjectId(id)},
         {"$set": {
-            "question": data["question"],
-            "options": data["options"],
-            "correctAnswer": data["correctAnswer"]
+            "question": data['question'],
+            "options": data['options'],
+            "correctAnswer": data['correctAnswer']
         }}
     )
-    return jsonify({"modified": result.modified_count})
+    return jsonify({"message": "Question updated!"})
 
 
-@app.route("/question/delete", methods=["POST"])
-def delete_question():
-    data = request.json
-    if data["email"] != ADMIN_EMAIL:
-        return jsonify({"error": "Unauthorized"}), 403
-    result = questions_col.delete_one({"question": data["question"]})
-    return jsonify({"deleted": result.deleted_count})
+
+#DELETE
+
+@app.route("/question/<id>", methods=["DELETE"])
+def delete_question(id):
+    try:
+        result = questions_col.delete_one({"_id": ObjectId(id)})
+        print("Deleted ID:", id, "Count:", result.deleted_count)
+        if result.deleted_count == 1:
+            return jsonify({"message": "Question deleted!"}), 200
+        else:
+            return jsonify({"message": "Question not found"}), 404
+    except Exception as e:
+        print("Error deleting question:", str(e))
+        return jsonify({"message": "Server error"}), 500
+
+
+
 
 
 @app.route("/submit", methods=['POST'])
